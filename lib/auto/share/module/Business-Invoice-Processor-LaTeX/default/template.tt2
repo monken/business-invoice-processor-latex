@@ -1,0 +1,31 @@
+Items: [% invoice.count_all %]
+
+[% counter = 1 %]
+[%- BLOCK items %]
+[% FOREACH item IN items.elements %]
+[% IF depth == 1 && counter != 1; '\midrule'; END -%]
+ [% counter; counter = counter + 1 %]
+  & [% IF depth > 1; '\quad '.repeat(depth-1); '$\cdot$ \footnotesize{'; END; item.title; IF depth > 1; '}'; END %] [% IF item.description; '\newline \footnotesize{'; item.description | escape; '}'; END %]
+  & [% item.quantity | format_number %]
+  & [% item.price | format_price %]
+  & [% item.total | format_price %] \\
+[% IF item.items.count; PROCESS items items=item.items depth=depth+1; depth=depth-1; END %]
+[% END %]
+[% END -%]
+
+\begin{tabularx}{\textwidth}{ c X c r r}
+  \textbf{\#}  
+  & \textbf{Description}
+  & \textbf{Quantity}
+  & \textbf{Price}
+  & \textbf{Total} \\ \toprule
+     
+
+
+[% PROCESS items items=items depth=1 %]
+\bottomrule
+ & & & Netto & [% invoice.total | format_price %] \\
+ & & & Tax & [% (invoice.total * tax_rate) | format_price %] \\
+ & & & \textbf{Total} & \textbf{[% (invoice.total * (1+tax_rate)) | format_price %]} \\
+
+\end{tabularx}

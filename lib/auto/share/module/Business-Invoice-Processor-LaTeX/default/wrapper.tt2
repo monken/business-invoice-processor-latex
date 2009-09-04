@@ -1,0 +1,67 @@
+[%- USE Number.Format; USE Latex(format=invoice.processor.format); FILTER latex;  -%]
+\documentclass[10pt]{g-brief2}
+\usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+\usepackage{times}
+\usepackage{booktabs}
+\usepackage{wallpaper}
+\usepackage{color}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{helvet,multirow,tabularx}
+
+\renewcommand{\familydefault}{pag}
+\tiny
+
+\fenstermarken \trennlinien
+
+\RetourAdresse{\fontfamily{familydefault}\selectfont
+[% FILTER escape; company.name; END %]} 
+
+\Adresse { [% recipient.title | escape; ' \\ '; FILTER escape; recipient.first_name; ' '; recipient.last_name; END %]\\
+	     [%  FILTER escape; recipient.address; END %]}
+
+
+
+\Betreff{INVOICE}
+\Datum {\today}
+\Name{[% FILTER escape; company.name; END %]}
+
+\Anrede {}
+\Gruss {}{1cm}
+
+% 
+% [% chars = ['A','B','C','D','E','F'] %]
+% 
+% [% FOREACH line IN user.recall_mail_name.split("\n") %]
+% \NameZeile[% chars.${loop.index()} %]{[% line.escape %] }
+% [% END %]
+% 
+% 
+% [% FOREACH line IN user.recall_mail_address.split("\n") %]
+% \AdressZeile[% chars.${loop.index()} %]{[% line.escape %] }
+% [% END %]
+% 
+% 
+% [% FOREACH line IN user.recall_mail_phone.split("\n") %]
+% \TelefonZeile[% chars.${loop.index()} %]{[% line.escape %] }
+% [% END %]
+% 
+% 
+% [% FOREACH line IN user.recall_mail_bank.split("\n") %]
+% \BankZeile[% chars.${loop.index()} %]{[% line.escape %] }
+% [% END %]
+
+\begin{document}
+
+
+\begin{g-brief}
+\fontsize{9}{12}\selectfont
+
+[% content %]
+
+
+\end{g-brief}
+
+\end{document}
+[%  END; -%]
